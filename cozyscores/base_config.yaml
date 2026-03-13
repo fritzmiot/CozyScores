@@ -1,0 +1,18 @@
+# base_config.yaml - Base configuration file for training and evaluating models in the CozyScores project.
+# --- DEFAULT TRAINING PARAMETERS ---
+image_size: 1024
+batch_size: 8
+epochs: 30
+early_stopping_patience: 6
+learning_rate: 0.0001
+train_val_split: 0.8
+save_every_n_epochs: 3
+ensemble_size: 5
+
+# --- DEFAULT PATHS (Relative to a Project folder) ---
+# This assumes projects live in /projects/NAME/ and models live in /models/v4/
+model_dir: "../../models/v4"
+data_dir: "data"
+scored_dir: "data/scored_photos"
+unscored_dir: "data/unscored_photos"
+output_dir: "results"

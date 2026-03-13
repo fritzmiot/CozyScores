@@ -1,0 +1,23 @@
+# --- System & IDE Junk ---
+.vscode/
+__pycache__/
+*.pyc
+.DS_Store
+
+# --- Research Data Privacy ---
+# We ignore all project data by default to keep the repo clean
+projects/**/data/unscored_photos/*
+projects/**/results/*
+
+# --- The "Demo" Exceptions ---
+# We WANT the user to have the directory structure and the demo photos
+!projects/**/results/.gitkeep
+!projects/**/data/scored_photos/.gitkeep
+
+# Allow the specific demo folder and its contents
+!projects/SKA31/data/unscored_photos/Photo_score1/
+
+# --- The Models ---
+# Since you want it to be "turnkey," we allow the v4 models
+# (If they are >50MB each, consider GitHub LFS, but .pt files are usually fine)
+!models/v4/*.pt

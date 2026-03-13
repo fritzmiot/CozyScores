@@ -1,0 +1,7 @@
+# config.yaml - Configuration file for SKA-31 project
+# Only include things that are DIFFERENT from the base_config
+# For SKA31, we just need to confirm it uses the standard paths.
+project_name: "SKA-31"
+
+# If you wanted to run SKA31 with a different batch size or learning rate, 
+# you would just add those lines here and they would override the base.
