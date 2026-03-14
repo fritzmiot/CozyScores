@@ -1,37 +1,45 @@
 # 🐭 CozyScores: Deep Learning Nest Quality Scoring
 
+![CozyScores Pipeline](CozyScores_Pipeline.png)
+
 CozyScores is a PyTorch-based pipeline designed for automated, high-throughput scoring of mouse nesting behavior. By using an ensemble of ResNet18 models, it provides both a predicted score (1.0–5.0) and a measure of confidence (Standard Deviation) for every cage photo.
 
 ---
 ## 🛠️ Environment Setup
 
-Before running CozyScores, ensure you have the correct environment active.
+To ensure CozyScores runs with the exact library versions used during validation, follow these steps to set up your local environment.
 
 1. **Create the Environment:**
     ```Bash
-    conda create -n behavior_ml python=3.10
-    conda activate behavior_ml
+    conda create -n cozyscores_env python=3.10 -y
+    conda activate cozyscores_env
     ```
     
 2. **Install Dependencies:**
+    Navigate to your local CozyScores directory and run:
     ```Bash
-    pip install torch torchvision pandas numpy pillow tqdm pyyaml scikit-learn seaborn pillow-heif
+    # Replace the path below with your actual folder location
+    cd path/to/your/CozyScores
+    pip install -r requirements.txt
     ```    
 ---
 ## 📂 Project Structure
 
 CozyScores uses a "Central Engine" architecture. The scripts stay in the root, while your experimental data lives in `projects/`.
-```
+```text
 CozyScores/
 ├── cozyscores/          # The Engine (predict.py, train.py, utils.py)
-├── models/              # Trained model weights (v4, v5, etc.)
+├── models/              # Trained weights
+│   └── v4/              # Production version (validated in Miot & Shih et al.)
+│   └── ...              # (Future semantic versions v1.x.x will go here)
 └── projects/
-    └── SKA-31/          # Your specific experiment
-        ├── config.yaml  # Project-specific overrides
-        ├── data/
-        │   ├── scored_photos/    # TRAINING DATA (Subfolders required)
-        │   └── unscored_photos/  # INFERENCE DATA
-        └── results/              # Output CSVs and Plots
+    └── SKA-31/          # Example experiment
+    │   ├── config.yaml  # Project-specific overrides
+    │   ├── data/
+    │   │   ├── scored_photos/    # TRAINING DATA (Subfolders required)
+    │   │   └── unscored_photos/  # INFERENCE DATA
+    │   └── results/              # Output CSVs and Plots
+    └── ...              # (Add new experiment folders here)
 ```
 ---
 ## ⚙️ Configuration Magic
@@ -101,7 +109,21 @@ python cozyscores/predict.py --config projects/YOUR_PROJECT/config.yaml
 - **Activation:** Scaled Sigmoid (forces outputs to stay between 1.0 and 5.0).
     
 - **Preprocessing:** Letterbox Resizing (preserves aspect ratio without stretching the cage dimensions).
+
+- **Illustrations:** Figure created with BioRender.com
     
+---
+## 🎓 Citation
+
+If you use CozyScores in your research, please cite:
+> Miot & Shih et al (TBD). TITLE. [In Review/Journal].
+
+---
+## ⚖️ License & Acknowledgements
+- Distributed under the **MIT License**. See `LICENSE` for more information.
+- Illustrations created with **BioRender.com**.
+- Lab volunteers who helped with shredding.
+
 ---
 ## 📝 Lab Notes & Troubleshooting
 
