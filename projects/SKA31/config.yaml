@@ -1,7 +1,14 @@
-# config.yaml - Configuration file for SKA-31 project
-# Only include things that are DIFFERENT from the base_config
-# For SKA31, we just need to confirm it uses the standard paths.
-project_name: "SKA-31"
+# config.yaml - Configuration file for SKA31 project
+# Only include values that differ from cozyscores/base_config.yaml.
 
-# If you wanted to run SKA31 with a different batch size or learning rate, 
-# you would just add those lines here and they would override the base.
+project_name: "SKA31"
+
+# Controls derived paths:
+#   model_dir              -> ../../models/scoring/<version>
+#   heatmap_dir            -> results/gradcam/scoring_<version>
+#   prediction_output_dir  -> results/predictions/scoring_<version>
+#   evaluation_output_dir  -> results/evaluation/scoring_<version>
+scoring_model_version: "v5"
+
+# To run the production v4 model instead, change only:
+# scoring_model_version: "v4"

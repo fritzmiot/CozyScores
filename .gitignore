@@ -1,23 +1,134 @@
-# --- System & IDE Junk ---
+# ------------------------------------------------------------
+# System / IDE / Python cache
+# ------------------------------------------------------------
 .vscode/
 __pycache__/
 *.pyc
+.ipynb_checkpoints/
 .DS_Store
+Thumbs.db
 
-# --- Research Data Privacy ---
-# We ignore all project data by default to keep the repo clean
-projects/**/data/unscored_photos/*
-projects/**/results/*
 
-# --- The "Demo" Exceptions ---
-# We WANT the user to have the directory structure and the demo photos
-!projects/**/results/.gitkeep
-!projects/**/data/scored_photos/.gitkeep
+# ------------------------------------------------------------
+# Large media files
+# Ignore videos and common large image/movie formats unless explicitly allowed.
+# ------------------------------------------------------------
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.wmv
+*.m4v
 
-# Allow the specific demo folder and its contents
+
+# ------------------------------------------------------------
+# Private project data
+# Do not commit animal images, raw source datasets, or study data by default.
+# ------------------------------------------------------------
+projects/*/data/scored_photos/**
+projects/*/data/unscored_photos/**
+
+
+# ------------------------------------------------------------
+# Segmentation annotations
+# Ignore real annotation images/masks by default because they may contain
+# private study images. Keep manifests/placeholders unless explicitly allowed.
+# ------------------------------------------------------------
+projects/*/data/segmentation_annotations/images/**
+projects/*/data/segmentation_annotations/masks/**
+
+
+# ------------------------------------------------------------
+# Metadata
+# Ignore real metadata tables by default because they may contain animal IDs,
+# groups, dates, treatments, etc. Add sanitized examples later if desired.
+# ------------------------------------------------------------
+projects/*/data/metadata/**
+
+
+# ------------------------------------------------------------
+# Generated intermediate files
+# ------------------------------------------------------------
+projects/*/work/**
+
+
+# ------------------------------------------------------------
+# Generated results
+# ------------------------------------------------------------
+projects/*/results/**
+
+
+# ------------------------------------------------------------
+# Keep project folder structure
+# ------------------------------------------------------------
+!projects/*/data/
+!projects/*/data/scored_photos/
+!projects/*/data/scored_photos/.gitkeep
+!projects/*/data/unscored_photos/
+!projects/*/data/unscored_photos/.gitkeep
+
+!projects/*/data/metadata/
+!projects/*/data/metadata/.gitkeep
+
+!projects/*/data/segmentation_annotations/
+!projects/*/data/segmentation_annotations/annotation_manifest.csv
+!projects/*/data/segmentation_annotations/images/
+!projects/*/data/segmentation_annotations/images/.gitkeep
+!projects/*/data/segmentation_annotations/masks/
+!projects/*/data/segmentation_annotations/masks/.gitkeep
+
+!projects/*/work/
+!projects/*/work/.gitkeep
+
+!projects/*/results/
+!projects/*/results/.gitkeep
+!projects/*/results/predictions/
+!projects/*/results/predictions/.gitkeep
+!projects/*/results/gradcam/
+!projects/*/results/gradcam/.gitkeep
+!projects/*/results/evaluation/
+!projects/*/results/evaluation/.gitkeep
+!projects/*/results/segmentation_qc/
+!projects/*/results/segmentation_qc/.gitkeep
+!projects/*/results/metrics/
+!projects/*/results/metrics/.gitkeep
+!projects/*/results/analysis/
+!projects/*/results/analysis/.gitkeep
+!projects/*/results/figures/
+!projects/*/results/figures/.gitkeep
+
+
+# ------------------------------------------------------------
+# Demo / documentation exceptions
+# Only explicitly approved example images should be tracked.
+# ------------------------------------------------------------
 !projects/SKA31/data/unscored_photos/Photo_score1/
+!projects/SKA31/data/unscored_photos/Photo_score1/**
 
-# --- The Models ---
-# Since you want it to be "turnkey," we allow the v4 models
-# (If they are >50MB each, consider GitHub LFS, but .pt files are usually fine)
-!models/v4/*.pt
+!projects/SKA31/data/unscored_photos/Score_keys/
+!projects/SKA31/data/unscored_photos/Score_keys/**
+
+
+# ------------------------------------------------------------
+# Model weights
+# Model weights are large; if tracked, use Git LFS.
+# Default: ignore all model files except organized scoring model releases.
+# ------------------------------------------------------------
+models/**
+*.pt
+*.pth
+
+!models/
+!models/scoring/
+!models/scoring/**/
+!models/scoring/**/*.pt
+!models/scoring/**/.gitkeep
+
+# Local archive only; do not publish old v3 checkpoints
+models/scoring/v3/**
+
+# Future segmentation model releases can be enabled later when ready.
+# !models/segmentation/
+# !models/segmentation/**/
+# !models/segmentation/**/*.pt
+# !models/segmentation/**/.gitkeep

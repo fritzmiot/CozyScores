@@ -20,3 +20,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("name")
     init_project(parser.parse_args().name)
+# EoF init_project.py

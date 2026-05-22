@@ -22,55 +22,79 @@ def predict_images(cfg):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
-    # Paths are already resolved as absolute by utils.load_config
+    # Paths are resolved/derived by utils.load_config().
     model_dir = cfg["model_dir"]
     unscored_dir = cfg["unscored_dir"]
-    output_dir = cfg["output_dir"]
+    output_dir = cfg.get("prediction_output_dir", cfg["output_dir"])
     ensemble_size = cfg["ensemble_size"]
     image_size = cfg["image_size"]
+    scoring_model_version = cfg.get("scoring_model_version", "unknown")
 
-    # Load Ensemble
+    print(f"Scoring model version: {scoring_model_version}")
+    print(f"Loading models from: {model_dir}")
+    print(f"Saving predictions to: {output_dir}")
+
+    # Load ensemble models.
     models = []
     for i in range(ensemble_size):
         path = model_dir / f"model_{i}_best.pt"
+
         if not path.exists():
             raise FileNotFoundError(f"Missing ensemble model: {path}")
+
         model = create_model()
         model = load_model(model, None, path, device)[0]
         model.eval()
         models.append(model)
-    
+
     image_paths = load_unscored_images(unscored_dir)
+
     if not image_paths:
         print(f"No images found in {unscored_dir}")
         return
+
+    print(f"Found {len(image_paths)} images to predict.")
 
     all_results = []
     transform = get_transforms(image_size=image_size, mode="val")
 
     for img_path in tqdm(image_paths, desc="Predicting"):
         img = load_image(img_path)
-        if img is None: continue
-        
+
+        if img is None:
+            print(f"Skipping unreadable image: {img_path}")
+            continue
+
         input_tensor = transform(img).to(device).unsqueeze(0)
-        
+
         preds = []
         with torch.no_grad():
             for model in models:
                 preds.append(model(input_tensor).item())
-        
+
         relative_path = os.path.relpath(img_path, unscored_dir)
-        all_results.append({
+
+        row = {
             "path_and_file": relative_path,
             "mean_score": np.mean(preds),
             "std_dev": np.std(preds),
-            **{f"model_{i}": p for i, p in enumerate(preds)}
-        })
+            "scoring_model_version": scoring_model_version,
+        }
+
+        # Save each ensemble member prediction separately.
+        for i, pred in enumerate(preds):
+            row[f"model_{i}"] = pred
+
+        all_results.append(row)
 
     df = pd.DataFrame(all_results)
+
     os.makedirs(output_dir, exist_ok=True)
-    df.to_csv(output_dir / "predicted_scores.csv", index=False)
-    print(f"Results saved to: {output_dir / 'predicted_scores.csv'}")
+
+    output_path = output_dir / "predicted_scores.csv"
+    df.to_csv(output_path, index=False)
+
+    print(f"Results saved to: {output_path}")
 
 def main():
     parser = argparse.ArgumentParser()
@@ -83,3 +107,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+# EoF predict.py

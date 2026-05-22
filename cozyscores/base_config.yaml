@@ -1,4 +1,21 @@
 # base_config.yaml - Base configuration file for training and evaluating models in the CozyScores project.
+# --- MODEL VERSIONING ---
+# This single value controls model loading/saving and versioned output folders.
+scoring_model_version: "v4"
+
+# --- DEFAULT PATHS (Relative to a Project folder) ---
+# This assumes projects live in /projects/NAME/ and models live in /models/scoring/
+# These are root/base locations. Specific model/output paths are derived in utils.load_config().
+model_root: "../../models/scoring"
+
+data_dir: "data"
+scored_dir: "data/scored_photos"
+unscored_dir: "data/unscored_photos"
+output_dir: "results"
+
+# Grad-CAM outputs will be derived as:
+# results/gradcam/scoring_<scoring_model_version>
+
 # --- DEFAULT TRAINING PARAMETERS ---
 image_size: 1024
 batch_size: 8
@@ -9,10 +26,22 @@ train_val_split: 0.8
 save_every_n_epochs: 3
 ensemble_size: 5
 
-# --- DEFAULT PATHS (Relative to a Project folder) ---
-# This assumes projects live in /projects/NAME/ and models live in /models/v4/
-model_dir: "../../models/v4"
-data_dir: "data"
-scored_dir: "data/scored_photos"
-unscored_dir: "data/unscored_photos"
-output_dir: "results"
+# --- OTHER DEFAULT SETTINGS ---
+# --- Nest-emphasis augmentation settings ---
+nest_emphasis:
+  enabled: true
+  min_value: 145
+  max_saturation: 115
+  max_lab_b: 150
+  dim_factor: 0.30
+  blur_background: true
+  blur_kernel: 31
+
+  # --- Random erasing augmentation ---
+random_erasing:
+  enabled: true
+  p: 0.20
+  scale_min: 0.01
+  scale_max: 0.05
+  ratio_min: 0.3
+  ratio_max: 3.3
